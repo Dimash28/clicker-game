@@ -18,8 +18,15 @@ MonoBehaviour:
   upgradeLevelData:
   - price: 50
     value: 2
+    isSold: 0
+    button: {fileID: 0}
   - price: 100
     value: 5
+    isSold: 0
+    button: {fileID: 0}
   - price: 250
     value: 10
+    isSold: 0
+    button: {fileID: 0}
+  currentLevel: 0
   icon: {fileID: 0}
