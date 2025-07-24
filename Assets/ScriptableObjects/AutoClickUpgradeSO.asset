@@ -15,11 +15,14 @@ MonoBehaviour:
   upgradeName: Auto Click
   description: Unlock AutoClick. Earn coins automatically every second.
   type: 1
-  upgradeLevelData:
-  - price: 2000
-    value: 5
+  upgradeLevelDataList:
   - price: 5000
-    value: 10
+    value: 5
+    isSold: 0
   - price: 10000
-    value: 20
+    value: 10
+    isSold: 0
+  - price: 50000
+    value: 50
+    isSold: 0
   icon: {fileID: 0}

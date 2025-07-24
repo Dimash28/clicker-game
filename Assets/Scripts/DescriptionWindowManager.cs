@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class DescriptionWindowManager : MonoBehaviour
 {
-    [SerializeField] private ClickerManager clickerManager;
+    [SerializeField] private UpgradeManager upgradeManager;
 
     [SerializeField] private TextMeshProUGUI description;
     [SerializeField] private TextMeshProUGUI priceValue;
@@ -12,12 +12,11 @@ public class DescriptionWindowManager : MonoBehaviour
     public void UpdateDescriptionUI(UpgradeDataSO upgradeDataSO, int level) 
     {
         description.text = upgradeDataSO.description;
-        priceValue.text = upgradeDataSO.upgradeLevelData[level].price.ToString();
+        priceValue.text = upgradeDataSO.upgradeLevelDataList[level].price.ToString();
     }
 
     public void UpdateSelectedUpgradeDataSO(UpgradeDataSO upgradeDataSO, int level) 
     {
-        clickerManager.SetSelectedUpgradeDataSO(upgradeDataSO);
-        clickerManager.SetCurrentUpgradeLevel(level);
+        upgradeManager.SelectUpgrade(upgradeDataSO, level);
     }
 }

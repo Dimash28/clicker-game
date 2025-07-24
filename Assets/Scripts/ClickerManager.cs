@@ -4,51 +4,97 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Collections;
 
 public class ClickerManager : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI coinsAmountText;
-
-    private UpgradeDataSO selectedUpgradeDataSO;
-
-    private int currentLevel;
+    [SerializeField] private CurrencyManager currencyManager;
+    [SerializeField] private UIManager uiManager;
+    [SerializeField] private UpgradeManager upgradeManager;
 
     private int addValue = 1;
 
-    private int coinsAmount = 0;
+    private int autoClickValue = 0;
 
-    public void AddCoin()
+    private bool autoClickRunning = false;
+
+    private readonly WaitForSeconds oneSecond = new WaitForSeconds(1);
+
+    private void Start()
     {
-        coinsAmount += addValue;
-
-        UpdateUI();
+        uiManager.UpdateUI(currencyManager.GetCoinsAmount());
+        upgradeManager.OnUpgradeApplied += UpgradeManager_OnUpgradeApplied;
     }
 
-    public void BuyUpgrade() 
+    private void UpgradeManager_OnUpgradeApplied(object sender, System.EventArgs e)
     {
-        if (coinsAmount >= selectedUpgradeDataSO.upgradeLevelData[currentLevel].price
-            && selectedUpgradeDataSO.type == UpgradeType.MoreCoinsPerClick
-            && selectedUpgradeDataSO.upgradeLevelData[currentLevel].isSold == false) 
+        uiManager.UpdateUI(currencyManager.GetCoinsAmount());
+    }
+
+    public void MakeClick() 
+    {
+        currencyManager.AddCoin(addValue);
+        uiManager.UpdateUI(currencyManager.GetCoinsAmount());
+    }
+
+    public void StartAutoClick() 
+    {
+        if (!autoClickRunning && autoClickValue > 0)
         {
-            coinsAmount -= selectedUpgradeDataSO.upgradeLevelData[currentLevel].price;
-            UpdateUI();
-            addValue = selectedUpgradeDataSO.upgradeLevelData[currentLevel].value;
-            selectedUpgradeDataSO.upgradeLevelData[currentLevel].isSold = true;
+            autoClickRunning = true;
+            StartCoroutine(AutoClickCoroutine());
         }
     }
 
-    private void UpdateUI()
+    private IEnumerator AutoClickCoroutine() 
     {
-        coinsAmountText.text = coinsAmount.ToString();
+        while (autoClickRunning)
+        {
+            currencyManager.AddCoin(autoClickValue);
+            uiManager.UpdateUI(currencyManager.GetCoinsAmount());
+            yield return oneSecond;
+        }
     }
 
-    public void SetSelectedUpgradeDataSO(UpgradeDataSO upgradeDataSO) 
+    private void StopAutoClick() 
     {
-        selectedUpgradeDataSO = upgradeDataSO;
+        autoClickRunning = false;
+        StopCoroutine(AutoClickCoroutine());
     }
 
-    public void SetCurrentUpgradeLevel(int level) 
+    public int GetAddValue()
     {
-        currentLevel = level;
+        return addValue;
+    }
+
+    public int GetAutoClickValue()
+    {
+        return autoClickValue;
+    }
+
+    public void SetAddValue(int value) 
+    {
+        addValue = value;
+    }
+
+    public void SetAutoClickValue(int value)
+    {
+        autoClickValue = value;
+    }
+
+    public void GiveTwoKCoins() 
+    {
+        currencyManager.AddCoin(2000);
+        uiManager.UpdateUI(currencyManager.GetCoinsAmount());
+    }
+
+    public void ResetProgress() 
+    {
+        currencyManager.SetCoinsAmount(0);
+        StopAutoClick();
+        addValue = 1;
+        autoClickValue = 0;
+        upgradeManager.ResetUpgrades();
+        uiManager.UpdateUI(currencyManager.GetCoinsAmount());
     }
 }

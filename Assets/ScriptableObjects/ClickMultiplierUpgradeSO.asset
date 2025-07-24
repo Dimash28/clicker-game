@@ -15,9 +15,11 @@ MonoBehaviour:
   upgradeName: Click Multiplier
   description: Multiply your clicks! Each press gives more clicks.
   type: 2
-  upgradeLevelData:
-  - price: 50000
-    value: 2
+  upgradeLevelDataList:
   - price: 100000
+    value: 2
+    isSold: 0
+  - price: 500000
     value: 5
+    isSold: 0
   icon: {fileID: 0}

@@ -16,6 +16,7 @@ public class UpgradeButton : MonoBehaviour
     private void Awake()
     {
         button = GetComponent<Button>();
+
         if (button != null && descriptionWindowManager != null && upgradeDataSO != null)
         {
             button.onClick.AddListener(() => descriptionWindowManager.UpdateDescriptionUI(upgradeDataSO,level));

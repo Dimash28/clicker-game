@@ -15,18 +15,14 @@ MonoBehaviour:
   upgradeName: Power Click
   description: Earn more coins per click!
   type: 0
-  upgradeLevelData:
-  - price: 50
+  upgradeLevelDataList:
+  - price: 500
     value: 2
     isSold: 0
-    button: {fileID: 0}
-  - price: 100
+  - price: 1000
     value: 5
     isSold: 0
-    button: {fileID: 0}
-  - price: 250
-    value: 10
+  - price: 2000
+    value: 15
     isSold: 0
-    button: {fileID: 0}
-  currentLevel: 0
   icon: {fileID: 0}

@@ -15,6 +15,7 @@ public class UpgradeDataSO : ScriptableObject
     public string upgradeName;
     [TextArea] public string description;
     public UpgradeType type;
-    public List<UpgradeLevelData> upgradeLevelData = new List<UpgradeLevelData>();
+    public List<UpgradeLevelData> upgradeLevelDataList = new List<UpgradeLevelData>();
+    public int level;
     public Sprite icon;
 }

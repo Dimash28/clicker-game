@@ -7,7 +7,7 @@ public class ShopManager : MonoBehaviour
     [SerializeField] private GameObject shopPanel;
     [SerializeField] private GameObject descriptionWindow;
 
-    private void Start()
+    private void Awake()
     {
         HideShopPanel();
         HideDescriptionWindow();
