@@ -12,6 +12,8 @@ public class ClickerManager : MonoBehaviour
     [SerializeField] private UIManager uiManager;
     [SerializeField] private UpgradeManager upgradeManager;
 
+    private int clickMultiplier = 1;
+
     private int addValue = 1;
 
     private int autoClickValue = 0;
@@ -33,7 +35,7 @@ public class ClickerManager : MonoBehaviour
 
     public void MakeClick() 
     {
-        currencyManager.AddCoin(addValue);
+        currencyManager.AddCoin(addValue * clickMultiplier);
         uiManager.UpdateUI(currencyManager.GetCoinsAmount());
     }
 
@@ -50,7 +52,7 @@ public class ClickerManager : MonoBehaviour
     {
         while (autoClickRunning)
         {
-            currencyManager.AddCoin(autoClickValue);
+            currencyManager.AddCoin(autoClickValue * clickMultiplier);
             uiManager.UpdateUI(currencyManager.GetCoinsAmount());
             yield return oneSecond;
         }
@@ -82,9 +84,14 @@ public class ClickerManager : MonoBehaviour
         autoClickValue = value;
     }
 
+    public void SetClickMultiplier(int value) 
+    {
+        clickMultiplier = value;
+    }
+
     public void GiveTwoKCoins() 
     {
-        currencyManager.AddCoin(2000);
+        currencyManager.AddCoin(5000);
         uiManager.UpdateUI(currencyManager.GetCoinsAmount());
     }
 
@@ -94,6 +101,7 @@ public class ClickerManager : MonoBehaviour
         StopAutoClick();
         addValue = 1;
         autoClickValue = 0;
+        clickMultiplier = 1;
         upgradeManager.ResetUpgrades();
         uiManager.UpdateUI(currencyManager.GetCoinsAmount());
     }

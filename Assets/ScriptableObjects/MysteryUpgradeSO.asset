@@ -10,17 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6a3a10e585103874ab193a42d73bfe5e, type: 3}
-  m_Name: ClickMultiplierUpgradeSO
+  m_Name: MysteryUpgradeSO
   m_EditorClassIdentifier: 
-  upgradeName: Click Multiplier
-  description: Multiply your clicks! Each press gives more clicks.
-  type: 2
-  upgradeLevelDataList:
-  - levelNumber: 0
-    price: 100000
-    value: 2
-  - levelNumber: 1
-    price: 500000
-    value: 5
+  upgradeName: 
+  description: 
+  type: 0
+  upgradeLevelDataList: []
   level: 0
   icon: {fileID: 0}

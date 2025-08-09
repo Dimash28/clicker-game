@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class UpgradeManager : MonoBehaviour
@@ -18,15 +19,14 @@ public class UpgradeManager : MonoBehaviour
     private int upgradeLevel = -1;
     private int currentAutoClickLevel = -1;
     private int currentPowerClickLevel = -1;
-
-    private void Awake()
-    {
-        SaveManager.Instance.LoadPowerClickUpgradeLevel(out currentPowerClickLevel);
-        SaveManager.Instance.LoadAutoClickUpgradeLevel(out currentAutoClickLevel);
-    }
+    private int currentClickMultiplierLevel = -1;
 
     private void Start()
     {
+        SaveManager.Instance.LoadPowerClickUpgradeLevel(out currentPowerClickLevel);
+        SaveManager.Instance.LoadAutoClickUpgradeLevel(out currentAutoClickLevel);
+        SaveManager.Instance.LoadClickMultiplierUpgradeLevel(out currentClickMultiplierLevel);
+
         foreach (UpgradeDataSO upgradeDataSO in upgradeDataSOList) 
         {
             if (upgradeDataSO.type == UpgradeType.MoreCoinsPerClick && currentPowerClickLevel >= 0)
@@ -40,25 +40,37 @@ public class UpgradeManager : MonoBehaviour
                 clickerManager.SetAutoClickValue(levelData.value);
                 clickerManager.StartAutoClick();
             }
+            else if (upgradeDataSO.type == UpgradeType.ClickMultiplier && currentClickMultiplierLevel >= 0)
+            {
+                var levelData = upgradeDataSO.upgradeLevelDataList[currentClickMultiplierLevel];
+                clickerManager.SetClickMultiplier(levelData.value);
+            }
         }
     }
 
     private void ApplyUpgrade(UpgradeLevelData levelData)
     {
-        if (selectedUpgradeDataSO.type == UpgradeType.MoreCoinsPerClick)
+        switch (selectedUpgradeDataSO.type) 
         {
-            clickerManager.SetAddValue(levelData.value);
-            currentPowerClickLevel = levelData.levelNumber;
+            case UpgradeType.MoreCoinsPerClick:
+                clickerManager.SetAddValue(levelData.value);
+                currentPowerClickLevel = levelData.levelNumber;
 
-            SaveManager.Instance.SavePowerClickUpgradeLevel(currentPowerClickLevel);
-        }
-        else if (selectedUpgradeDataSO.type == UpgradeType.AutoClick)
-        {
-            clickerManager.SetAutoClickValue(levelData.value);
-            currentAutoClickLevel = levelData.levelNumber;
-            clickerManager.StartAutoClick();
+                SaveManager.Instance.SavePowerClickUpgradeLevel(currentPowerClickLevel);
+                break;
+            case UpgradeType.AutoClick:
+                clickerManager.SetAutoClickValue(levelData.value);
+                currentAutoClickLevel = levelData.levelNumber;
+                clickerManager.StartAutoClick();
 
-            SaveManager.Instance.SaveAutoClickUpgradeLevel(currentAutoClickLevel);
+                SaveManager.Instance.SaveAutoClickUpgradeLevel(currentAutoClickLevel);
+                break;
+            case UpgradeType.ClickMultiplier:
+                clickerManager.SetClickMultiplier(levelData.value);
+                currentClickMultiplierLevel = levelData.levelNumber;
+
+                SaveManager.Instance.SaveClickMultiplierLevel(currentClickMultiplierLevel);
+                break;
         }
     }
 
@@ -72,18 +84,23 @@ public class UpgradeManager : MonoBehaviour
     {
         var levelData = selectedUpgradeDataSO.upgradeLevelDataList[currentLevelIndex];
 
-        if (selectedUpgradeDataSO.type == UpgradeType.MoreCoinsPerClick)
+        switch (selectedUpgradeDataSO.type)
         {
-            upgradeLevel = currentPowerClickLevel;
-        }
-        else if (selectedUpgradeDataSO.type == UpgradeType.AutoClick)
-        {
-            upgradeLevel = currentAutoClickLevel;
+            case UpgradeType.MoreCoinsPerClick:
+                upgradeLevel = currentPowerClickLevel;
+                break;
+            case UpgradeType.AutoClick:
+                upgradeLevel = currentAutoClickLevel;
+                break;
+            case UpgradeType.ClickMultiplier:
+                upgradeLevel = currentClickMultiplierLevel;
+                break;
         }
 
         Debug.Log(upgradeLevel);
         Debug.Log(levelData.levelNumber);
         Debug.Log(levelData.levelNumber - upgradeLevel);
+
         if (currencyManager.GetCoinsAmount() >= levelData.price && levelData.levelNumber - upgradeLevel == 1)
         {
             currencyManager.SpendCoins(levelData.price);
@@ -97,8 +114,10 @@ public class UpgradeManager : MonoBehaviour
     {
         currentAutoClickLevel = -1;
         currentPowerClickLevel = -1;
+        currentClickMultiplierLevel = -1;
 
         SaveManager.Instance.SavePowerClickUpgradeLevel(currentPowerClickLevel);
         SaveManager.Instance.SaveAutoClickUpgradeLevel(currentAutoClickLevel);
+        SaveManager.Instance.SaveClickMultiplierLevel(currentClickMultiplierLevel);
     }
 }

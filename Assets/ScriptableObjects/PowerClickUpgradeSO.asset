@@ -16,13 +16,14 @@ MonoBehaviour:
   description: Earn more coins per click!
   type: 0
   upgradeLevelDataList:
-  - price: 500
+  - levelNumber: 0
+    price: 500
     value: 2
-    isSold: 0
-  - price: 1000
+  - levelNumber: 1
+    price: 1000
     value: 5
-    isSold: 0
-  - price: 2000
+  - levelNumber: 2
+    price: 2000
     value: 15
-    isSold: 0
+  level: 0
   icon: {fileID: 0}
